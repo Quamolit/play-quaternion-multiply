@@ -22,22 +22,15 @@ jobs:
       with:
         version: "0.9.0-a1"
 
-    - name: "prepare modules"
-      run: >
-        mkdir -p ~/.config/calcit/modules/ && cd ~/.config/calcit/modules/
-        && git clone https://github.com/Quatrefoil-GL/touch-control.git
-        && git clone https://github.com/Quatrefoil-GL/quatrefoil.git --branch=0.0.7
-        && git clone https://github.com/mvc-works/pointed-prompt.git
-
     - name: "compiles to js"
       run: >
-        cr --emit-js --once
+        caps --ci && cr --once js
         && cp assets/* js-out/
         && yarn && yarn vite build --base=./
 
     - name: Deploy to server
       id: deploy
-      uses: Pendect/action-rsyncer@v1.1.0
+      uses: Pendect/action-rsyncer@v2.0.0
       env:
         DEPLOY_KEY: ${{secrets.rsync_private_key}}
       with:
